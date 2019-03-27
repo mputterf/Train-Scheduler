@@ -41,12 +41,36 @@ database.ref().on("child_added", function(snapshot) {
     console.log(sv.FirstTime);
     console.log(sv.Frequency);
 
+    // First Time (pushed back 1 year to make sure it comes before current time)
+    var convertedFirstTime = moment(sv.FirstTime, "HH:mm").subtract(1, "years");
+    console.log("Converted First Time", convertedFirstTime);
+
+    // Current Time
+    var currentTime = moment();
+    console.log("CURRENT TIME: " + moment(currentTime).format("hh:mm"));
+
+    // Difference between the times
+    var diffTime = moment().diff(moment(convertedFirstTime), "minutes");
+    console.log("DIFFERENCE IN TIME: " + diffTime);
+
+    // Time apart (remainder)
+    var Remainder = diffTime % sv.Frequency;
+    console.log(Remainder);
+
+    // Minutes Until Train
+    var MinutesTillTrain = sv.Frequency - Remainder;
+    console.log("MINUTES TILL TRAIN: " + MinutesTillTrain);
+
+    // Next Train
+    var nextTrain = moment().add(MinutesTillTrain, "minutes");
+    console.log("ARRIVAL TIME: " + moment(nextTrain).format("hh:mm"));
+
     var newRow = $("<tr>");
     newRow.append("<td>" + sv.TrainName + "</td>" +
                   "<td>" + sv.Destination + "</td>" +
                   "<td>" + sv.Frequency + "</td>" + 
-                  "<td>" + /*Next arrival +*/ "</td>" +  
-                  "<td>" + /*Minutes away +*/ "</td>");
+                  "<td>" + moment(nextTrain).format("hh:mm") + "</td>" +  
+                  "<td>" + MinutesTillTrain + "</td>");
     $("tbody").append(newRow);
  
     // Handle the errors

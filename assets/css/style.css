@@ -1,0 +1,16 @@
+.jumbotron{
+    background: purple;
+}
+
+.card-header{
+    background: goldenrod;
+}
+
+.card{
+    border-color: goldenrod;
+}
+
+.btn{
+    background: purple;
+
+}
